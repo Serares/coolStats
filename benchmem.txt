@@ -1,0 +1,6 @@
+goos: linux
+goarch: amd64
+pkg: github.com/Serares/coolStats
+BenchmarkRun-16    	      10	 326381958 ns/op	495568278 B/op	 5041037 allocs/op
+PASS
+ok  	github.com/Serares/coolStats	3.596s
