@@ -13,5 +13,17 @@ The above command will generate two files that will be used for profiling the pr
 To use the generated files for profiling you have to run:
 `go tool pprof cpu00.pprof`
 
+For memory 
+`go test -bench . -benchtime=10x -run ^$ -memprofile mem00.pprof`
+
+`go tool pprof -alloc_space mem00.pprof`
+
 This will start an interactive cli session where you can view more details about the functions running in the program
 Inside that interactive cli session you can use the `top` and `list` commands to see details of the functions that are running
+
+
+For tracing:
+
+`go test -bench . -benchtime=10x -run ^$ -trace trace01.out`
+
+`go tool trace trace01.out`

@@ -34,6 +34,10 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 		opFunc = sum
 	case "avg":
 		opFunc = avg
+	case "min":
+		opFunc = min
+	case "max":
+		opFunc = max
 	default:
 		return fmt.Errorf("%w: %s", ErrInvalidOperation, op)
 	}
@@ -82,7 +86,9 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 		wg.Wait()
 		close(doneCh)
 	}()
-
+	// TODO try to improve the performance of min and max
+	// by running the functions in multiple gorutines
+	// or by trying to run the functions for each file that is read
 	for {
 		select {
 		case err := <-errCh:
