@@ -94,7 +94,11 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 		case err := <-errCh:
 			return err
 		case data := <-resCh:
-			consolidate = append(consolidate, data...)
+			if op == "min" || op == "max" {
+				consolidate = append(consolidate, opFunc(data))
+			} else {
+				consolidate = append(consolidate, data...)
+			}
 		case <-doneCh:
 			_, err := fmt.Fprintln(out, opFunc(consolidate))
 			return err
