@@ -95,7 +95,33 @@ func run(filenames []string, op string, column int, out io.Writer) error {
 			return err
 		case data := <-resCh:
 			if op == "min" || op == "max" {
-				consolidate = append(consolidate, opFunc(data))
+				// todo see if using goroutines here can improve the performance
+				// spawn like 4 goroutines and divide the date between them to be processed
+				minWg := sync.WaitGroup{}
+				theData := make(chan float64)
+				quarterLength := len(data) / 4
+				start := 0
+				endQuarter := quarterLength
+				incrementQuarter := 2
+				for i := 0; i < 4; i++ {
+					minWg.Add(1)
+					go func(start, end int) {
+						defer minWg.Done()
+						theData <- opFunc(data[start:end])
+					}(start, endQuarter)
+					start = endQuarter
+					endQuarter = quarterLength * incrementQuarter
+					incrementQuarter++
+				}
+				go func() {
+					minWg.Wait()
+					close(theData)
+				}()
+
+				for quarterData := range theData {
+					consolidate = append(consolidate, quarterData)
+				}
+
 			} else {
 				consolidate = append(consolidate, data...)
 			}

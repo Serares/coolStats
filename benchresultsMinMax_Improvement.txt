@@ -1,0 +1,7 @@
+goos: linux
+goarch: amd64
+pkg: github.com/Serares/coolStats
+cpu: 11th Gen Intel(R) Core(TM) i7-11850H @ 2.50GHz
+BenchmarkRun-16    	      10	 134744628 ns/op
+PASS
+ok  	github.com/Serares/coolStats	1.487s
